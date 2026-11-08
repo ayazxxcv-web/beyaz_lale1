@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beyaz Lale</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box}
+*{box-sizing:inherit}
+html,body{height:100%;margin:0;background:#02060c;overflow:hidden}
+body{background:radial-gradient(ellipse at 50% 85%,#0d2236 0%,#071320 45%,#02060c 100%)}
+#stars{position:fixed;inset:0;pointer-events:none;animation:fade 2s ease both}
+#stars i{position:absolute;border-radius:50%;background:#cfe6ff;animation:tw var(--t) ease-in-out var(--o) infinite alternate}
+@keyframes tw{from{opacity:.15}to{opacity:.95}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+svg{position:fixed;inset:0;width:100%;height:100%;display:block}
+.plant{filter:drop-shadow(0 0 6px rgba(60,255,150,.35))}
+.stem{fill:none;stroke:url(#sg);stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw var(--l,5s) linear var(--d) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.lf{transform-origin:0 0;animation:grow 1.8s cubic-bezier(.2,.9,.3,1.1) var(--d) both}
+@keyframes grow{from{transform:scale(0)}to{transform:scale(1)}}
+.sw{transform-origin:0 0;animation:sway 4.5s ease-in-out calc(var(--d) + 1.8s) infinite alternate both}
+@keyframes sway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
+.soil{animation:fade 1.5s ease .6s both}
+/* bud */
+.bud{transform-origin:0 0;animation:budin 1.5s cubic-bezier(.2,.9,.3,1.1) 6.4s both,budout .9s ease 8.6s forwards}
+@keyframes budin{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes budout{to{opacity:0}}
+/* tulip */
+.tp{transform-origin:0 0;animation:open 3s cubic-bezier(.2,.8,.25,1.05) var(--d) both}
+@keyframes open{from{transform:rotate(calc(var(--a)*.1)) scale(.82,.7);opacity:0}15%{opacity:1}to{transform:rotate(var(--a)) scale(1);opacity:1}}
+.flowerglow{opacity:0;animation:rg 4s ease 9s forwards}
+@keyframes rg{to{opacity:1}}
+.head{transform-origin:0 0;animation:breath 5s ease-in-out 13s infinite alternate}
+@keyframes breath{from{transform:rotate(-1.5deg) scale(1)}to{transform:rotate(1.5deg) scale(1.02)}}
+/* particles */
+.pa{opacity:0;animation:fl var(--t) ease-out var(--d) infinite}
+@keyframes fl{0%{opacity:0;transform:translate(0,0) scale(.4)}15%{opacity:1}60%{opacity:.9}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1)}}
+.sp{transform-origin:center;transform-box:fill-box;animation:spk 2.4s ease-in-out var(--d) infinite}
+@keyframes spk{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+@media (prefers-reduced-motion:reduce){.sw,.head{animation:none}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<svg viewBox="0 0 400 700" preserveAspectRatio="xMidYMax meet" aria-label="Topraktan büyüyen beyaz lale">
+<defs>
+ <linearGradient id="sg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0e9a55"/><stop offset="1" stop-color="#5dffa0"/></linearGradient>
+ <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0b8a52"/><stop offset="1" stop-color="#3dffb0"/></linearGradient>
+ <linearGradient id="tf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#c3d0e4"/><stop offset=".45" stop-color="#f6f9ff"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+ <linearGradient id="tb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8fa0bb"/><stop offset=".5" stop-color="#d3deee"/><stop offset="1" stop-color="#eef3fb"/></linearGradient>
+ <radialGradient id="rgl"><stop offset="0" stop-color="#e8f2ff" stop-opacity=".5"/><stop offset=".5" stop-color="#9cc4ff" stop-opacity=".16"/><stop offset="1" stop-color="#9cc4ff" stop-opacity="0"/></radialGradient>
+ <radialGradient id="soilg" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#4a2f22"/><stop offset="1" stop-color="#150c08"/></radialGradient>
+</defs>
+<ellipse class="soil" cx="200" cy="662" rx="110" ry="16" fill="url(#soilg)"/>
+<ellipse class="soil" cx="200" cy="654" rx="60" ry="8" fill="#5b3a2a" opacity=".6"/>
+<g class="plant" id="plant"></g>
+<g class="flowerglow"><circle cx="200" cy="248" r="135" fill="url(#rgl)"/></g>
+<g id="flower" transform="translate(200 302)"></g>
+<g id="parts" style="filter:drop-shadow(0 0 3px #dff0ff)"></g>
+</svg>
+<script>
+(function(){
+var R=Math.random,S=document.getElementById('stars'),h='';
+var n=Math.round(Math.min(innerWidth*innerHeight/6500,260));
+for(var i=0;i<n;i++){var z=R()<.15?2.4:R()<.5?1.6:1;
+h+='<i style="left:'+(R()*100)+'%;top:'+(R()*100)+'%;width:'+z+'px;height:'+z+'px;--t:'+(1.5+R()*3).toFixed(1)+'s;--o:-'+(R()*4).toFixed(1)+'s"></i>';}
+S.innerHTML=h;
+
+var LF='M-6 0C0-70 24-150 84-212C70-130 54-60 20 0Z',RIB='M7 0C20-70 40-140 80-205';
+function leaf(t,d){
+ return '<g transform="'+t+'"><g class="lf" style="--d:'+d.toFixed(2)+'s"><g class="sw" style="--d:'+d.toFixed(2)+'s"><path d="'+LF+'" fill="url(#lg)"/><path d="'+RIB+'" stroke="#c9ffe3" stroke-opacity=".5" stroke-width="1.2" fill="none"/></g></g></g>';
+}
+function blade(x,a,s,d){
+ return '<g transform="translate('+x+' 656) rotate('+a+') scale('+s+')"><g class="lf" style="--d:'+d.toFixed(2)+'s"><g class="sw" style="--d:'+d.toFixed(2)+'s"><path d="M0 0C-4-35 2-70-2-100C8-70 6-35 4 0Z" fill="url(#sg)"/></g></g></g>';
+}
+var P='';
+/* grass blades */
+var bl=[[-52,-32,.7],[-30,-14,1],[-12,-4,.8],[14,8,1],[34,20,.75],[58,34,.6],[-70,-45,.5],[72,44,.5],[2,-18,1.15]];
+bl.forEach(function(b,i){P+=blade(200+b[0]*.7,b[1],b[2]*.75,1.3+i*.12);});
+/* stem */
+P+='<path class="stem" pathLength="1" d="M200 656C198 580 205 480 200 410C197 360 203 330 200 304" stroke-width="5.5" style="--d:1.6s;--l:5.2s"/>';
+/* tulip leaves */
+P+=leaf('translate(197 654) scale(-1 1) rotate(10) scale(1)',2.4);
+P+=leaf('translate(203 654) rotate(6) scale(.92)',3.1);
+P+=leaf('translate(199 654) scale(-1 1) rotate(-14) scale(.6)',3.8);
+P+=leaf('translate(201 654) rotate(-10) scale(.52)',4.3);
+/* closed bud */
+P+='<g transform="translate(200 302)"><g class="sw" style="--d:6s"><g class="bud">'
+ +'<path d="M0 0C-26-6-30-42-14-68C-8-76-4-82 0-90C4-82 8-76 14-68C30-42 26-6 0 0Z" fill="url(#tb)"/>'
+ +'<path d="M0 0C-12-8-16-44-2-88C10-48 12-8 0 0Z" fill="url(#tf)" opacity=".9"/>'
+ +'<path d="M-4-10C-8-35-4-62 0-84" stroke="#b5c4dc" stroke-opacity=".7" fill="none"/>'
+ +'</g></g></g>';
+document.getElementById('plant').innerHTML=P;
+
+/* open tulip */
+var TP='M0 0C-30-8-36-50-22-78C-14-92-6-98 0-102C6-98 14-92 22-78C36-50 30-8 0 0Z';
+function petal(a,s,d,g){
+ return '<g transform="scale('+s+')"><g class="tp" style="--a:'+a+'deg;--d:'+d.toFixed(2)+'s">'
+  +'<path d="'+TP+'" fill="url(#'+g+')" stroke="#dbe6f6" stroke-opacity=".6" stroke-width=".9"/>'
+  +(g=='tf'?'<path d="M0-8C-3-40-2-70 0-96" stroke="#c4d2e8" stroke-opacity=".7" stroke-width="1" fill="none"/><path d="M-14-30C-18-50-14-68-8-84" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" fill="none"/>':'')
+  +'</g></g>';
+}
+var b=9,H='';
+H+=petal(-34,.97,b,'tb')+petal(34,.97,b+.1,'tb')+petal(0,.93,b+.2,'tb');
+H+=petal(-17,1.03,b+.45,'tf')+petal(17,1.03,b+.55,'tf');
+H+=petal(-3,1,b+.8,'tf');
+document.getElementById('flower').innerHTML='<g class="head">'+H+'</g>';
+
+/* particles */
+var Q='';
+for(var i=0;i<46;i++){
+ var a=R()*Math.PI*2,r=20+R()*115,x=200+Math.cos(a)*r,y=252+Math.sin(a)*r*.8+10,
+ d=(10.5+R()*5).toFixed(1),t=(4+R()*5).toFixed(1),c=R()<.3?'#ffffff':'#bfe0ff';
+ Q+='<circle class="pa" cx="'+x.toFixed(0)+'" cy="'+y.toFixed(0)+'" r="'+(.9+R()*1.7).toFixed(1)+'" fill="'+c+'" style="--d:'+d+'s;--t:'+t+'s;--x:'+((R()-.5)*50).toFixed(0)+'px;--y:'+(-50-R()*110).toFixed(0)+'px"/>';
+}
+for(var i=0;i<9;i++){
+ var a=R()*Math.PI*2,r=45+R()*100,x=200+Math.cos(a)*r,y=252+Math.sin(a)*r*.8;
+ Q+='<path class="sp" d="M0-6Q0 0 6 0Q0 0 0 6Q0 0-6 0Q0 0 0-6Z" transform="translate('+x.toFixed(0)+' '+y.toFixed(0)+')" fill="#f2f8ff" style="--d:'+(11+R()*6).toFixed(1)+'s;opacity:0"/>';
+}
+document.getElementById('parts').innerHTML=Q;
+})();
+</script>
+</body>
+</html>
